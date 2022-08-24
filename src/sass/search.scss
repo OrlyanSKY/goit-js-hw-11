@@ -1,0 +1,150 @@
+:root {
+  --line-thickness: 0.25em;
+  --glass-size: 65%;
+  --icon-height: 3rem;
+  --transition-speed: 0.45s;
+  --timing-function: cubic-bezier(0.66, 1.51, 0.77, 1.13);
+  --icon-color: white;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: linear-gradient(135deg, #3bced1 0%, #422075 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.header {
+  height: 100;
+  position: relative;
+}
+.search-icon {
+  box-sizing: border-box;
+  width: var(--icon-height);
+  height: var(--icon-height);
+  max-width: 30em;
+  transition: all var(--transition-speed) linear,
+    border-color 0s linear var(--transition-speed);
+  position: absolute;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  border: solid var(--line-thickness);
+  border-color: rgba(255, 255, 255, 0);
+  border-radius: 100px;
+  padding: 0.25em;
+
+  &__wrapper {
+    width: var(--icon-height);
+    height: var(--icon-height);
+    position: absolute;
+    border-radius: 100px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto 0;
+    transform: rotate(-45deg);
+    transition: all 0 linear;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__input {
+    background: none;
+    text-align: start;
+    outline: none;
+    display: block;
+    border: none;
+    background: rgba(255, 255, 255, 0);
+    width: calc(100% - (var(--icon-height) / 2 + 1rem));
+    margin-right: 6rem;
+    height: 100%;
+    border-radius: 100px;
+    transition: all var(--transition-speed) linear;
+    font-size: 1.1em;
+    padding: 0 0.5em;
+    color: white;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
+
+  &__glass {
+    width: var(--glass-size);
+    height: var(--glass-size);
+    border: solid var(--line-thickness);
+    border-color: var(--icon-color);
+    border-radius: 100px;
+    margin: 0 auto;
+    position: relative;
+    transition: all var(--transition-speed) var(--timing-function)
+        var(--transition-speed),
+      border-color 0s linear var(--transition-speed);
+  }
+
+  &__handle {
+    height: calc(100% - var(--glass-size));
+    width: var(--line-thickness);
+    margin: 0 auto;
+    background: var(--icon-color);
+    position: absolute;
+    border-radius: 0 0 100px 100px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: all var(--transition-speed) var(--timing-function);
+    transition-delay: var(--transition-speed);
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--icon-color);
+      transform: rotate(0deg);
+      transition: all var(--transition-speed) var(--timing-function);
+      transition-delay: 0s;
+    }
+  }
+
+  &.open {
+    width: calc(100vw - 1em);
+    border-color: var(--icon-color);
+    transition-delay: var(--transition-speed);
+  }
+
+  &.open &__input {
+    transition-delay: var(--transition-speed);
+  }
+
+  &.open &__glass {
+    width: 100%;
+    height: 100%;
+    transition: all var(--transition-speed) var(--timing-function) 0s,
+      border-color 0s linear var(--transition-speed);
+    border-color: rgba(0, 0, 0, 0);
+  }
+
+  &.open &__handle {
+    bottom: calc(50% - (100% - var(--glass-size)) / 2);
+    border-radius: 100px;
+    transition-delay: 0s;
+
+    &::after {
+      transition-delay: var(--transition-speed);
+      transform: rotate(90deg);
+    }
+  }
+}
