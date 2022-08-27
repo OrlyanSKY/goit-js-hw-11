@@ -1,6 +1,21 @@
 @import '~node_modules/modern-normalize/modern-normalize.css';
-
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 .container {
   width: 1050px;
   margin: 0 auto;
+}
+.gallery {
+  display: grid;
+  row-gap: 3;
+  column-gap: 4;
+  grid-template-columns: 2fr 2fr 2fr;
+  gap: 15px;
+  padding-top: 120px;
+}
+.info {
+  display: grid;
 }

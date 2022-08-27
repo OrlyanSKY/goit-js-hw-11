@@ -20,7 +20,9 @@ body {
 }
 .header {
   height: 100;
-  position: relative;
+  width: 100vw;
+  background: linear-gradient(90deg, #3bced1 0%, #422075 100%);
+  position: fixed;
 }
 .search-icon {
   box-sizing: border-box;
