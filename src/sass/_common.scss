@@ -2,7 +2,10 @@
 img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+}
+a {
+  text-decoration: none;
 }
 .container {
   width: 1050px;
@@ -10,9 +13,9 @@ img {
 }
 .gallery {
   display: grid;
-  row-gap: 3;
+  row-gap: 4;
   column-gap: 4;
-  grid-template-columns: 2fr 2fr 2fr;
+  grid-template-columns: 2fr 2fr 2fr 2fr;
   gap: 15px;
   padding-top: 120px;
 }

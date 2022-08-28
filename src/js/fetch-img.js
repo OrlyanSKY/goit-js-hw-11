@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function fetchPics(searchQuery) {
+export async function fetchPics(searchQuery, page) {
   const params = {
     key: '29482011-99768188be0395583a9f1e73d',
 
@@ -9,11 +9,11 @@ export async function fetchPics(searchQuery) {
     safesearch: true,
     q: `${searchQuery}`,
     per_page: 40,
+    page: `${page}`,
   };
   try {
-    return await axios
-      .get('https://pixabay.com/api/', { params })
-      .then(res => res.data);
+    const response = await axios.get('https://pixabay.com/api/', { params });
+    return await response.data;
   } catch (err) {
     console.error(err);
   }

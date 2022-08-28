@@ -6,34 +6,42 @@ import gap from '../templates/gap.hbs';
 
 const form = document.querySelector('#search-form');
 const galleryRef = document.querySelector('.gallery');
+const guard = document.querySelector('.js-guard');
 
 form.addEventListener('submit', onFormSbmt);
-form.addEventListener('keydown', logKey);
+// form.addEventListener('keydown', logKey);
 
-async function onFormSbmt(evt) {
+let page = 1;
+let nameRequest = '';
+
+let options = {
+  root: null,
+  rootMargin: '300px',
+  threshold: 1,
+};
+const observer = new IntersectionObserver(updateGallery, options);
+
+function onFormSbmt(evt) {
   evt.preventDefault();
-  const nameRequest = evt.currentTarget.elements.input.value;
+  nameRequest = evt.currentTarget.elements.input.value;
 
+  pixabayAPI(nameRequest, page);
+}
+
+async function pixabayAPI(nameRequest, page) {
   try {
-    const data = await fetchPics(nameRequest);
+    const data = await fetchPics(nameRequest, page);
     const hits = await data.hits;
-
     if (hits.length === 0) {
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     }
     renderMarcup(hits);
+    observer.observe(guard);
     simpleGallery();
   } catch (error) {
     Notify.warning('ERROR');
-  }
-}
-
-function logKey(evt) {
-  if (evt.code === 'Enter') {
-    form.classList.remove('open');
-    // evt.currentTarget.reset();
   }
 }
 
@@ -42,7 +50,13 @@ function renderMarcup(data) {
     galleryRef.innerHTML += gap(elem);
   });
 }
-
+function updateGallery(entries) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      pixabayAPI(nameRequest, (page += 1));
+    }
+  });
+}
 function simpleGallery() {
   let gallery = new SimpleLightbox('.gallery a', {
     captionsData: 'alt',
@@ -51,3 +65,9 @@ function simpleGallery() {
   });
   gallery.on('show.simplelightbox');
 }
+// function logKey(evt) {
+//   if (evt.code === 'Enter') {
+//     form.classList.remove('open');
+//     evt.currentTarget.reset();
+//   }
+// }
