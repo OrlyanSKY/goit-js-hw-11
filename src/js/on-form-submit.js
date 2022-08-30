@@ -1,9 +1,13 @@
-import { fetchPics } from './fetch-img';
 import { Notify } from 'notiflix';
+
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
+import { fetchPics } from './fetch-img';
+import { renderMarkup } from './renderMarkup';
 import gap from '../templates/gap.hbs';
 
+//Refs
 const form = document.querySelector('#search-form');
 const galleryRef = document.querySelector('.gallery');
 const guard = document.querySelector('.js-guard');
@@ -28,14 +32,20 @@ const observer = new IntersectionObserver(updateGallery, options);
 
 function onFormSbmt(evt) {
   evt.preventDefault();
-  nameRequest = evt.currentTarget.elements.input.value;
 
+  if (nameRequest === evt.currentTarget.elements.input.value) {
+    Notify.warning(`It's already found! May be another one?`);
+    return;
+  }
+
+  nameRequest = evt.currentTarget.elements.input.value;
   evt.target.reset();
   form.classList.remove('open');
   galleryRef.innerHTML = '';
   page = 1;
 
   if (!nameRequest) {
+    Notify.warning('Please, enter a search term!');
     evt.preventDefault();
     return false;
   }
@@ -48,6 +58,11 @@ async function pixabayAPI(nameRequest, page) {
     const data = await fetchPics(nameRequest, page);
     const hits = await data.hits;
 
+    renderMarkup(hits, galleryRef, gap);
+    gallery.refresh();
+    if (hits.length >= 40) {
+      observer.observe(guard);
+    }
     if (page === 1 && hits.length > 1) {
       Notify.info(`Hooray! We found ${data.totalHits} images.`);
     }
@@ -57,21 +72,13 @@ async function pixabayAPI(nameRequest, page) {
       );
       return;
     }
-    renderMarcup(hits);
-    observer.observe(guard);
-    gallery.refresh();
   } catch (error) {
-    Notify.warning(
-      `We're sorry, but you've reached the end of search results.`
-    );
+    // Notify.warning(
+    //   `We're sorry, but you've reached the end of search results.`
+    // );
   }
 }
 
-function renderMarcup(data) {
-  data.forEach(elem => {
-    galleryRef.insertAdjacentHTML('beforeend', gap(elem));
-  });
-}
 function updateGallery(entries) {
   entries.forEach(entry => {
     if (entry.isIntersecting) {

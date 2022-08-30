@@ -1,5 +1,0 @@
-// function renderMarcup(data) {
-//     data.forEach(elem => {
-//       this.innerHTML += someCountriesMarkup(elem);
-//     });
-// }
