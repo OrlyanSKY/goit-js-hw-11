@@ -11,10 +11,7 @@ export async function fetchPics(searchQuery, page) {
     per_page: 40,
     page: `${page}`,
   };
-  try {
-    const response = await axios.get('https://pixabay.com/api/', { params });
-    return await response.data;
-  } catch (err) {
-    console.error(err);
-  }
+
+  const response = await axios.get('https://pixabay.com/api/', { params });
+  return await response.data;
 }

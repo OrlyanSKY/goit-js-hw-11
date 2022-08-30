@@ -9,21 +9,36 @@ const galleryRef = document.querySelector('.gallery');
 const guard = document.querySelector('.js-guard');
 
 form.addEventListener('submit', onFormSbmt);
-// form.addEventListener('keydown', logKey);
 
 let page = 1;
 let nameRequest = '';
 
-let options = {
+const gallery = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  showCounter: false,
+});
+
+const options = {
   root: null,
-  rootMargin: '300px',
-  threshold: 1,
+  rootMargin: '100px',
+  threshold: 0.5,
 };
 const observer = new IntersectionObserver(updateGallery, options);
 
 function onFormSbmt(evt) {
   evt.preventDefault();
   nameRequest = evt.currentTarget.elements.input.value;
+
+  evt.target.reset();
+  form.classList.remove('open');
+  galleryRef.innerHTML = '';
+  page = 1;
+
+  if (!nameRequest) {
+    evt.preventDefault();
+    return false;
+  }
 
   pixabayAPI(nameRequest, page);
 }
@@ -32,8 +47,11 @@ async function pixabayAPI(nameRequest, page) {
   try {
     const data = await fetchPics(nameRequest, page);
     const hits = await data.hits;
-    console.log(hits.length);
-    if (hits.length === 0) {
+
+    if (page === 1 && hits.length > 1) {
+      Notify.info(`Hooray! We found ${data.totalHits} images.`);
+    }
+    if (!hits.length) {
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
@@ -41,7 +59,7 @@ async function pixabayAPI(nameRequest, page) {
     }
     renderMarcup(hits);
     observer.observe(guard);
-    simpleGallery();
+    gallery.refresh();
   } catch (error) {
     Notify.warning(
       `We're sorry, but you've reached the end of search results.`
@@ -61,19 +79,3 @@ function updateGallery(entries) {
     }
   });
 }
-function simpleGallery() {
-  let gallery = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionDelay: 250,
-    showCounter: false,
-  });
-  gallery.on('show.simplelightbox', function () {
-    gallery.refresh();
-  });
-}
-// function logKey(evt) {
-//   if (evt.code === 'Enter') {
-//     form.classList.remove('open');
-//     evt.currentTarget.reset();
-//   }
-// }
