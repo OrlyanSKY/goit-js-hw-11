@@ -1,6 +1,11 @@
 <a href='{{largeImageURL}}'>
   <div class='photo-card'>
-    <img src='{{webformatURL}}' alt='{{tags}}' loading='lazy' />
+    <div class='wrapper'><img
+        src='{{webformatURL}}'
+        alt='{{tags}}'
+        loading='lazy'
+      />
+    </div>
     <div class='info'>
       <p class='info-item'>
         <b>Likes:</b>
@@ -16,7 +21,8 @@
         {{comments}}
       </p>
       <p class='info-item'>
-        <b>Downloads{{downloads}}</b>
+        <b>Downloads:</b>
+        {{downloads}}
       </p>
     </div>
   </div>

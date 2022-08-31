@@ -9,17 +9,34 @@ a {
   color: white;
 }
 .container {
-  width: 1050px;
-  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  @media screen and (min-width: 480px) {
+    width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media screen and (min-width: 768px) {
+    width: 768px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    width: 1440px;
+  }
 }
 .gallery {
-  display: grid;
-  row-gap: 4;
-  column-gap: 4;
-  grid-template-columns: 2fr 2fr 2fr 2fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 15px;
+  justify-content: center;
   padding-top: 120px;
 }
+.wrapper {
+  width: 230px;
+  height: 180px;
+}
 .info {
-  display: grid;
+  text-align: center;
 }
