@@ -5,7 +5,6 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import search from './js/search';
 
 import { fetchPics } from './js/fetch-img';
-import { renderMarkup } from './js/renderMarkup';
 import gap from './templates/gap.hbs';
 import refs from './js/refs';
 
@@ -41,8 +40,7 @@ function onFormSbmt(evt) {
 
   if (!evt.currentTarget.elements.input.value) {
     Notify.warning('Please, enter a search term!');
-    evt.preventDefault();
-    return false;
+    return;
   }
   if (nameRequest === evt.currentTarget.elements.input.value) {
     Notify.warning(`It's already found! May be another one?`);
@@ -70,8 +68,7 @@ async function pixabayAPI(nameRequest, page) {
       );
       return;
     }
-
-    renderMarkup(hits, refs.galleryRef, gap);
+    gap(hits);
     gallery.refresh();
 
     if (hits.length === 40) {
