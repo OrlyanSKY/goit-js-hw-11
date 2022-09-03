@@ -7,13 +7,9 @@ import search from './js/search';
 import { fetchPics } from './js/fetch-img';
 import { renderMarkup } from './js/renderMarkup';
 import gap from './templates/gap.hbs';
+import refs from './js/refs';
 
-//Refs
-const form = document.querySelector('#search-form');
-const galleryRef = document.querySelector('.gallery');
-const guard = document.querySelector('.js-guard');
-
-form.addEventListener('submit', onFormSbmt);
+refs.form.addEventListener('submit', onFormSbmt);
 
 let page = 1;
 let nameRequest = '';
@@ -55,15 +51,15 @@ function onFormSbmt(evt) {
   nameRequest = evt.currentTarget.elements.input.value;
 
   evt.target.reset();
-  form.classList.remove('open');
-  galleryRef.innerHTML = '';
+  refs.form.classList.remove('open');
+  refs.galleryRef.innerHTML = '';
   page = 1;
 
   pixabayAPI(nameRequest, page);
 }
 
 async function pixabayAPI(nameRequest, page) {
-  observer.unobserve(guard); //если новый поиск вернет не более одной страницы
+  observer.unobserve(refs.guard); //если новый поиск вернет не более одной страницы
 
   try {
     const { hits, totalHits } = await fetchPics(nameRequest, page);
@@ -75,11 +71,11 @@ async function pixabayAPI(nameRequest, page) {
       return;
     }
 
-    renderMarkup(hits, galleryRef, gap);
+    renderMarkup(hits, refs.galleryRef, gap);
     gallery.refresh();
 
     if (hits.length === 40) {
-      observer.observe(guard);
+      observer.observe(refs.guard);
     }
 
     if (page === 1 && hits.length > 1) {
@@ -89,6 +85,6 @@ async function pixabayAPI(nameRequest, page) {
     Notify.warning(
       `We're sorry, but you've reached the end of search results.`
     );
-    observer.unobserve(guard);
+    observer.unobserve(refs.guard);
   }
 }
