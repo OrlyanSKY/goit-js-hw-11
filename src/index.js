@@ -68,7 +68,7 @@ async function pixabayAPI(nameRequest, page) {
       );
       return;
     }
-    gap(hits);
+    refs.galleryRef.insertAdjacentHTML('beforeend', gap(hits));
     gallery.refresh();
 
     if (hits.length === 40) {
