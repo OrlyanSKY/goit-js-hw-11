@@ -1,5 +1,5 @@
-export function renderMarkup(data, ref, markup) {
+export function renderMarkup(data, obj, markup) {
   data.forEach(elem => {
-    ref.insertAdjacentHTML('beforeend', markup(elem));
+    obj.insertAdjacentHTML('beforeend', markup(elem));
   });
 }
